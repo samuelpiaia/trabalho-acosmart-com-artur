@@ -1,0 +1,130 @@
+create database acosmart;
+use acosmart;
+
+CREATE TABLE clientes (
+    ID_cliente INT AUTO_INCREMENT PRIMARY KEY,
+    cpf_cnpj VARCHAR(20) NOT NULL,
+    nome_razao VARCHAR(150) NOT NULL,
+    email VARCHAR(100),
+    telefone VARCHAR(20),
+    endereco VARCHAR(255)
+);
+
+CREATE TABLE colaborador (
+    ID_colaborador INT AUTO_INCREMENT PRIMARY KEY,
+    perfil VARCHAR(50),
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    status VARCHAR(20)
+);
+
+CREATE TABLE Fornecedores (
+    ID_Fornecedor INT AUTO_INCREMENT PRIMARY KEY,
+    cnpj VARCHAR(20) NOT NULL,
+    email VARCHAR(100),alertas
+    cidade VARCHAR(100),
+    razao_social VARCHAR(150) NOT NULL,
+    telefone VARCHAR(20)
+);
+
+CREATE TABLE pedido (
+    ID_pedido INT AUTO_INCREMENT PRIMARY KEY,
+    ID_cliente INT NOT NULL,
+    data_pedido DATETIME DEFAULT CURRENT_TIMESTAMP,
+    prazo_entrega DATE,
+    valor_total DECIMAL(10, 2),
+    status VARCHAR(50),
+    CONSTRAINT fk_pedido_cliente FOREIGN KEY (ID_cliente) 
+        REFERENCES clientes(ID_cliente) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE colaborador_pedidos (
+    ID_pedidos INT NOT NULL,
+    ID_usuarios INT NOT NULL,
+    PRIMARY KEY (ID_pedidos, ID_usuarios),
+    CONSTRAINT fk_cp_pedido FOREIGN KEY (ID_pedidos) 
+        REFERENCES pedido(ID_pedido) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_cp_colaborador FOREIGN KEY (ID_usuarios) 
+        REFERENCES colaborador(ID_colaborador) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Alertas (
+    ID_alerta INT AUTO_INCREMENT PRIMARY KEY,
+    ID_usuario INT NOT NULL,
+    mensagem TEXT NOT NULL,
+    nivel VARCHAR(20),
+    data DATETIME DEFAULT CURRENT_TIMESTAMP,
+    tipo VARCHAR(50),
+    resolvido BOOLEAN DEFAULT FALSE,
+    CONSTRAINT fk_alertas_colaborador FOREIGN KEY (ID_usuario) 
+        REFERENCES colaborador(ID_colaborador) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Maquinas (
+    ID_maquina INT AUTO_INCREMENT PRIMARY KEY,
+    ID_colaborador INT,
+    tipo VARCHAR(50),
+    nome VARCHAR(100) NOT NULL,
+    status VARCHAR(20),
+    capacidade VARCHAR(50),
+    ultima_manutencao DATE,
+    CONSTRAINT fk_maquinas_colaborador FOREIGN KEY (ID_colaborador) 
+        REFERENCES colaborador(ID_colaborador) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE TABLE Log_cortes (
+    ID_corte INT AUTO_INCREMENT PRIMARY KEY,
+    ID_maquina INT NOT NULL,
+    status VARCHAR(50),
+    data_inicio DATETIME,
+    data_fim DATETIME,
+    operador VARCHAR(100),
+    CONSTRAINT fk_logcortes_maquina FOREIGN KEY (ID_maquina) 
+        REFERENCES Maquinas(ID_maquina) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Retalhos (
+    ID_trabalho INT AUTO_INCREMENT PRIMARY KEY,
+    ID_maquina INT NOT NULL,
+    status VARCHAR(50),
+    quantidade INT DEFAULT 1,
+    material VARCHAR(100),
+    espessura_mm DECIMAL(8, 2),
+    comprimento_mm DECIMAL(8, 2),
+    largura_mm DECIMAL(8, 2),
+    CONSTRAINT fk_retalhos_maquina FOREIGN KEY (ID_maquina) 
+        REFERENCES Maquinas(ID_maquina) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Materiais (
+    ID_Material INT AUTO_INCREMENT PRIMARY KEY,
+    ID_Fornecedor INT,
+    nome VARCHAR(100) NOT NULL,
+    tipo VARCHAR(50),
+    unidade VARCHAR(20),
+    espessura_mm DECIMAL(8, 2),
+    descricao TEXT,
+    CONSTRAINT fk_materiais_fornecedor FOREIGN KEY (ID_Fornecedor) 
+        REFERENCES Fornecedores(ID_Fornecedor) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE TABLE Materiais_maquinas (
+    ID_maquina INT NOT NULL,
+    ID_material INT NOT NULL,
+    PRIMARY KEY (ID_maquina, ID_material),
+    CONSTRAINT fk_mm_maquina FOREIGN KEY (ID_maquina) 
+        REFERENCES Maquinas(ID_maquina) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_mm_material FOREIGN KEY (ID_material) 
+        REFERENCES Materiais(ID_Material) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Materiais_fornecedores (
+    ID_fornecedor INT NOT NULL,
+    ID_materiais INT NOT NULL,
+    PRIMARY KEY (ID_fornecedor, ID_materiais),
+    CONSTRAINT fk_mf_fornecedor FOREIGN KEY (ID_fornecedor) 
+        REFERENCES Fornecedores(ID_Fornecedor) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_mf_material FOREIGN KEY (ID_materiais) 
+        REFERENCES Materiais(ID_Material) ON DELETE CASCADE ON UPDATE CASCADE
+);
