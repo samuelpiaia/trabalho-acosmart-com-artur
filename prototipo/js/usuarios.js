@@ -46,8 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
           <td class="p-3.5">${usuario.senha || "-"}</td>
           <td class="p-3.5 ${perfilClass}">${usuario.perfil || "-"}</td>
           <td class="p-3.5 ${statusClass}">${usuario.status || "-"}</td>
-          <td class="p-3.5 text-right"><a class="px-2.5 py-1 bg-[#2563eb] hover:bg-[#1d4ed8] text-white rounded text-[11px]">editar</a>
-          <a class="px-2.5 py-1 bg-[#2563eb] hover:bg-[#1d4ed8] text-white rounded text-[11px]">remover</a></td>
+          <td class="p-3.5 text-right"><a class="px-2.5 py-1 bg-[#008000] hover:bg-[#007300] text-white rounded text-[11px]">editar</a>
+          <a class="px-2.5 py-1 bg-[#CC0000] hover:bg-[#A30000] text-white rounded text-[11px]">remover</a></td>
         `;
         tbody.appendChild(tr);
       });

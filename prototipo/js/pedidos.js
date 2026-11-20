@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <td class="p-3.5 text-emerald-400 font-bold">${valorTotal}</td>
           <td class="p-3.5">${statusBadge}</td>
           <td class="p-3.5 text-right"><a href="oficina.html" class="px-2.5 py-1 bg-[#2563eb] hover:bg-[#1d4ed8] text-white rounded text-[11px]">Executar</a>
-          <a class="px-2.5 py-1 bg-[#2563eb] hover:bg-[#1d4ed8] text-white rounded text-[11px]">cancelar</a></td>
+          <a class="px-2.5 py-1 bg-[#CC0000] hover:bg-[#A30000] text-white rounded text-[11px]">cancelar</a></td>
         `;
         tbody.appendChild(tr);
       });
