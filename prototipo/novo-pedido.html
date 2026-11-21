@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AçoSmart - Nova Ordem de Produção</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="h-screen w-screen overflow-hidden flex flex-col bg-[#0d0f12] text-slate-300">
+
+  <!-- Header Superior Oficial AçoSmart -->
+  <header class="bg-[#14171d] border-b border-[#242832] px-4 py-2.5 flex items-center justify-between shadow-md z-20 shrink-0">
+    <div class="flex items-center space-x-3">
+      <div class="px-2.5 py-1 bg-[#222733] border border-[#373d4d] rounded text-slate-200 font-mono-tech font-bold text-sm tracking-wider flex items-center gap-1.5">
+        <span>⚙️ AÇOSMART</span>
+      </div>
+      <div class="h-4 w-[1px] bg-[#2a2e39]"></div>
+      
+      <nav class="flex items-center gap-1 font-mono-tech text-xs">
+        <a href="index.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Dashboard</a>
+        <a href="pedidos.html" class="px-3 py-1.5 rounded bg-[#222733] text-blue-400 font-bold border border-[#373d4d]">Pedidos</a>
+        <a href="alertas.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Alertas</a>
+        <a href="materiais.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Materiais</a>
+        <a href="maquinas.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Máquinas</a>
+        <a href="usuarios.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Usuários</a>
+        <a href="fornecedores.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Fornecedores</a>
+        <a href="clientes.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Clientes</a>
+        <a href="oficina.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Oficina</a>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-3 font-mono-tech text-xs">
+      <span id="userDisplay" class="text-slate-400">Operador: Admin</span>
+      <a href="login.html" id="btnLogout" class="px-2.5 py-1 bg-[#1b1e26] hover:bg-[#252934] border border-[#2a2e39] rounded text-slate-300">Sair</a>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="flex-1 p-6 overflow-y-auto industrial-grid">
+    <div class="max-w-6xl mx-auto space-y-6">
+
+      <!-- Breadcrumbs -->
+      <div class="text-xs font-mono-tech text-slate-500 flex items-center gap-2">
+        <a href="pedidos.html" class="text-slate-400 hover:text-slate-200">Pedidos</a>
+        <span>/</span>
+        <span id="breadcrumbItem" class="text-slate-400">Novo Pedido</span>
+        <span>/</span>
+        <span id="breadcrumbAction" class="text-blue-400 font-semibold">Nova Ordem</span>
+      </div>
+
+      <!-- Título da Página e Botão Voltar -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222631] pb-4">
+        <div>
+          <h2 id="pageTitle" class="text-xl font-bold font-mono-tech text-slate-100 flex items-center gap-2">
+            <span>📋</span> Nova Ordem de Produção
+          </h2>
+          <p id="pageSubtitle" class="text-xs text-slate-400 font-mono-tech mt-1">
+            Cadastre um novo pedido industrial para corte e roteamento da fábrica.
+          </p>
+        </div>
+        <a href="pedidos.html" class="px-3 py-1.5 bg-[#1b1e26] hover:bg-[#252934] text-slate-300 rounded border border-[#2a2e39] text-xs font-mono-tech flex items-center gap-1.5 self-start sm:self-auto">
+          <span>← Voltar para pedidos</span>
+        </a>
+      </div>
+
+      <!-- Mensagem de Feedback -->
+      <div id="msgFeedback" class="hidden"></div>
+
+      <!-- Barra Informativa -->
+      <div class="bg-[#14171d] border border-[#222631] rounded p-3 text-xs font-mono-tech text-slate-400 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-blue-400">⚡</span>
+          <span>Dados integrados em tempo real com o banco de dados MySQL AÇOSMART.</span>
+        </div>
+        <span class="text-slate-500 text-[11px]">Tabela: pedido</span>
+      </div>
+
+      <!-- Grid 2 Colunas -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Formulário -->
+        <div class="lg:col-span-2 bg-[#14171d] border border-[#222631] rounded-lg p-6 shadow-lg">
+          <div class="border-b border-[#222631] pb-3 mb-5">
+            <h3 class="text-sm font-bold font-mono-tech text-slate-100">Dados do pedido</h3>
+            <p class="text-xs text-slate-500 font-mono-tech mt-0.5">Campos com * são obrigatórios.</p>
+          </div>
+
+          <form id="formPedido" class="space-y-4 font-mono-tech text-xs">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Código -->
+              <div>
+                <label class="text-slate-400 mb-1 block">Número da Ordem</label>
+                <input type="text" id="codigoPedido" disabled value="[Automático após salvar]" class="w-full bg-[#12151e] border border-[#222631] text-slate-500 rounded px-3 py-2 cursor-not-allowed">
+                <span class="text-[10px] text-slate-500 mt-1 block">Identificador gerado automaticamente.</span>
+              </div>
+
+              <!-- Cliente Vinculado -->
+              <div>
+                <label class="text-slate-300 font-semibold mb-1 block">Cliente / Indústria *</label>
+                <select id="ID_cliente" required class="w-full bg-[#181d2a] border border-[#283042] text-slate-200 rounded px-3 py-2 focus:border-blue-500 outline-none">
+                  <option value="">-- Carregando clientes... --</option>
+                </select>
+              </div>
+
+              <!-- Data do Pedido -->
+              <div>
+                <label class="text-slate-300 font-semibold mb-1 block">Data do pedido *</label>
+                <input type="date" id="data_pedido" required class="w-full bg-[#181d2a] border border-[#283042] text-slate-200 rounded px-3 py-2 focus:border-blue-500 outline-none">
+              </div>
+
+              <!-- Prazo de Entrega -->
+              <div>
+                <label class="text-slate-300 font-semibold mb-1 block">Prazo de entrega *</label>
+                <input type="date" id="prazo_entrega" required class="w-full bg-[#181d2a] border border-[#283042] text-slate-200 rounded px-3 py-2 focus:border-blue-500 outline-none">
+              </div>
+
+              <!-- Valor Total -->
+              <div>
+                <label class="text-slate-300 font-semibold mb-1 block">Valor total (R$) *</label>
+                <input type="number" step="0.01" id="valor_total" required placeholder="Ex: 15400.00" class="w-full bg-[#181d2a] border border-[#283042] text-slate-200 rounded px-3 py-2 focus:border-blue-500 outline-none">
+              </div>
+
+              <!-- Status Operacional -->
+              <div>
+                <label class="text-slate-300 font-semibold mb-1 block">Status da ordem *</label>
+                <select id="status" class="w-full bg-[#181d2a] border border-[#283042] text-slate-200 rounded px-3 py-2 focus:border-blue-500 outline-none">
+                  <option value="Aguardando">Aguardando (Em Fila)</option>
+                  <option value="Em produção">Em produção (Na Oficina)</option>
+                  <option value="Concluído">Concluído (Finalizado)</option>
+                  <option value="Cancelado">Cancelado</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Coluna da Direita -->
+        <div class="space-y-4">
+          
+          <div class="bg-[#14171d] border border-[#222631] rounded-lg p-5 shadow-lg space-y-3 font-mono-tech text-xs">
+            <h4 class="font-bold text-slate-100 text-sm border-b border-[#222631] pb-2 flex items-center gap-1.5">
+              <span>📋</span> Resumo do cadastro
+            </h4>
+            <div>
+              <span class="text-slate-500 block text-[11px]">Cliente</span>
+              <span id="resumoCliente" class="text-slate-200 font-bold">Novo Pedido</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block text-[11px]">Valor da Ordem</span>
+              <span id="resumoValor" class="text-emerald-400 font-bold">R$ 0.00</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block text-[11px]">Prazo de Entrega</span>
+              <span id="resumoPrazo" class="text-slate-300">Não definido</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block text-[11px]">Situação</span>
+              <span id="resumoStatusBadge" class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-400 border border-amber-800 inline-block mt-0.5">Aguardando</span>
+            </div>
+          </div>
+
+          <div class="bg-[#14171d] border border-[#222631] rounded-lg p-5 shadow-lg space-y-2 font-mono-tech text-xs">
+            <h4 class="font-bold text-slate-100 text-sm border-b border-[#222631] pb-2 flex items-center gap-1.5">
+              <span>💡</span> Antes de salvar
+            </h4>
+            <p class="text-slate-400 text-[11px] leading-relaxed">
+              Pedidos em produção aparecem instantaneamente na oficina de usinagem e no painel de corte automático de retalhos.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Barra de Ações Inferior -->
+      <div class="bg-[#14171d] border border-[#222631] rounded-lg p-4 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+        <div>
+          <span id="bottomBarTitle" class="text-xs font-mono-tech font-bold text-slate-200 block">Nova ordem de produção</span>
+          <span class="text-[11px] font-mono-tech text-slate-400">O novo pedido será gravado na tabela 'pedido' do MySQL.</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="pedidos.html" class="px-4 py-2 bg-[#1b1e26] hover:bg-[#252934] text-slate-300 border border-[#2a2e39] font-mono-tech text-xs rounded transition-colors">
+            Cancelar
+          </a>
+          <button type="submit" form="formPedido" id="btnSalvar" class="px-5 py-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-mono-tech font-bold text-xs rounded shadow flex items-center gap-1.5 transition-colors">
+            + Criar ordem de produção
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/crud-forms.js"></script>
+  <script src="js/form-pedido.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AçoSmart - Cadastrar novo fornecedor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="h-screen w-screen overflow-hidden flex flex-col bg-[#0d0f12] text-slate-300">
+
+  <!-- Header Superior Oficial AçoSmart -->
+  <header class="bg-[#14171d] border-b border-[#242832] px-4 py-2.5 flex items-center justify-between shadow-md z-20 shrink-0">
+    <div class="flex items-center space-x-3">
+      <div class="px-2.5 py-1 bg-[#222733] border border-[#373d4d] rounded text-slate-200 font-mono-tech font-bold text-sm tracking-wider flex items-center gap-1.5">
+        <span>⚙️ AÇOSMART</span>
+      </div>
+      <div class="h-4 w-[1px] bg-[#2a2e39]"></div>
+      
+      <nav class="flex items-center gap-1 font-mono-tech text-xs">
+        <a href="index.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Dashboard</a>
+        <a href="pedidos.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Pedidos</a>
+        <a href="alertas.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Alertas</a>
+        <a href="materiais.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Materiais</a>
+        <a href="maquinas.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Máquinas</a>
+        <a href="usuarios.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Usuários</a>
+        <a href="fornecedores.html" class="px-3 py-1.5 rounded bg-[#222733] text-blue-400 font-bold border border-[#373d4d]">Fornecedores</a>
+        <a href="clientes.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Clientes</a>
+        <a href="oficina.html" class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Oficina</a>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-3 font-mono-tech text-xs">
+      <span id="userDisplay" class="text-slate-400">Operador: Admin</span>
+      <a href="login.html" id="btnLogout" class="px-2.5 py-1 bg-[#1b1e26] hover:bg-[#252934] border border-[#2a2e39] rounded text-slate-300">Sair</a>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="flex-1 p-6 overflow-y-auto industrial-grid">
+    <div class="max-w-6xl mx-auto space-y-6">
+
+      <!-- Breadcrumbs -->
+      <div class="text-xs font-mono-tech text-slate-500 flex items-center gap-2">
+        <a href="fornecedores.html" class="text-slate-400 hover:text-slate-200">Fornecedores</a>
+        <span>/</span>
+        <span id="breadcrumbItem" class="text-slate-400">Novo Fornecedor</span>
+        <span>/</span>
+        <span id="breadcrumbAction" class="text-blue-400 font-semibold">Novo Cadastro</span>
+      </div>
+
+      <!-- Título da Página e Botão Voltar -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222631] pb-4">
+        <div>
+          <h2 id="pageTitle" class="text-xl font-bold font-mono-tech text-slate-100 flex items-center gap-2">
+            <span>🚚</span> Cadastrar novo fornecedor
+          </h2>
+          <p id="pageSubtitle" class="text-xs text-slate-400 font-mono-tech mt-1">
+            Cadastre uma nova siderúrgica ou distribuidor de matéria-prima.
+          </p>
+        </div>
+        <a href="fornecedores.html" class="px-3 py-1.5 bg-[#1b1e26] hover:bg-[#252934] text-slate-300 rounded border border-[#2a2e39] text-xs font-mono-tech flex items-center gap-1.5 self-start sm:self-auto">
+          <span>← Voltar para fornecedores</span>
+        </a>
+      </div>
+
+      <!-- Mensagem de Feedback -->
+      <div id="msgFeedback" class="hidden"></div>
+
+      <!-- Barra Informativa -->
+      <div class="bg-[#14171d] border border-[#222631] rounded p-3 text-xs font-mono-tech text-slate-400 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-blue-400">⚡</span>
+          <span>Dados integrados em tempo real com o banco de dados MySQL AÇOSMART.</span>
+        </div>
+        <span class="text-slate-500 text-[11px]">Tabela: Fornecedores</span>
+      </div>
+
+      <!-- Grid 2 Colunas -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Formulário -->
+        <div class="lg:col-span-2 bg-[#14171d] border border-[#222631] rounded-lg p-6 shadow-lg">
+          <div class="border-b border-[#222631] pb-3 mb-5">
+            <h3 class="text-sm font-bold font-mono-tech text-slate-100">Dados do fornecedor</h3>
+            <p class="text-xs text-slate-500 font-mono-tech mt-0.5">Campos com * são obrigatórios.</p>
+          </div>
+
+          <form id="formFornecedor" class="space-y-4 font-mono-tech text-xs">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Código -->
+              <div>
+                <label class="text-slate-400 mb-1 block">Código do Fornecedor</label>
+                <input type="text" id="codigoFornecedor" disabled value="[Automático após salvar]" class="w-full bg-[#12151e] border border-[#222631] text-slate-500 rounded px-3 py-2 cursor-not-allowed">
+                <span class="text-[10px] text-slate-500 mt-1 block">Identificador gerado pelo banco.</span>
+              </div>
+
+              <!-- Razão Social -->
+              <div>
+                <label class="text-slate-300 font-semibold mb-1 block">Razão Social / Nome Fantasia *</label>
+                <input type="text" id="razao_social" required placeholder="Ex: Gerdau Aços Longos S.A." class="w-full bg-[#181d2a] border border-[#283042] text-slate-200 rounded px-3 py-2 focus:border-blue-500 outline-none">
+              </div>
+
+              <!-- CNPJ -->
+              <div>
+                <label class="text-slate-300 font-semibold mb-1 block">CNPJ da empresa *</label>
+                <input type="text" id="cnpj" required placeholder="Ex: 33.611.500/0001-19" class="w-full bg-[#181d2a] border border-[#283042] text-slate-200 rounded px-3 py-2 focus:border-blue-500 outline-none">
+              </div>
+
+              <!-- Email -->
+              <div>
+                <label class="text-slate-300 font-semibold mb-1 block">Email comercial *</label>
+                <input type="email" id="email" required placeholder="comercial@gerdau.com" class="w-full bg-[#181d2a] border border-[#283042] text-slate-200 rounded px-3 py-2 focus:border-blue-500 outline-none">
+              </div>
+
+              <!-- Telefone -->
+              <div>
+                <label class="text-slate-300 font-semibold mb-1 block">Telefone de contato</label>
+                <input type="text" id="telefone" placeholder="(11) 3094-6600" class="w-full bg-[#181d2a] border border-[#283042] text-slate-200 rounded px-3 py-2 focus:border-blue-500 outline-none">
+              </div>
+
+              <!-- Cidade - UF -->
+              <div>
+                <label class="text-slate-300 font-semibold mb-1 block">Cidade / UF da Usina</label>
+                <input type="text" id="cidade" placeholder="Ex: São Paulo - SP" class="w-full bg-[#181d2a] border border-[#283042] text-slate-200 rounded px-3 py-2 focus:border-blue-500 outline-none">
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Coluna da Direita -->
+        <div class="space-y-4">
+          
+          <div class="bg-[#14171d] border border-[#222631] rounded-lg p-5 shadow-lg space-y-3 font-mono-tech text-xs">
+            <h4 class="font-bold text-slate-100 text-sm border-b border-[#222631] pb-2 flex items-center gap-1.5">
+              <span>📋</span> Resumo do cadastro
+            </h4>
+            <div>
+              <span class="text-slate-500 block text-[11px]">Siderúrgica / Fornecedor</span>
+              <span id="resumoNome" class="text-slate-200 font-bold">Não informado</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block text-[11px]">CNPJ</span>
+              <span id="resumoDoc" class="text-blue-400 font-mono">Não informado</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block text-[11px]">Email Comercial</span>
+              <span id="resumoEmail" class="text-slate-300">Não informado</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block text-[11px]">Telefone</span>
+              <span id="resumoTel" class="text-slate-400">-</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block text-[11px]">Polo Siderúrgico</span>
+              <span id="resumoCidade" class="text-slate-400 text-[11px]">-</span>
+            </div>
+          </div>
+
+          <div class="bg-[#14171d] border border-[#222631] rounded-lg p-5 shadow-lg space-y-2 font-mono-tech text-xs">
+            <h4 class="font-bold text-slate-100 text-sm border-b border-[#222631] pb-2 flex items-center gap-1.5">
+              <span>💡</span> Antes de salvar
+            </h4>
+            <p class="text-slate-400 text-[11px] leading-relaxed">
+              O fornecedor cadastrado poderá ser vinculado diretamente às especificações de ligas e chapas no catálogo de materiais.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Barra de Ações Inferior -->
+      <div class="bg-[#14171d] border border-[#222631] rounded-lg p-4 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+        <div>
+          <span id="bottomBarTitle" class="text-xs font-mono-tech font-bold text-slate-200 block">Novo cadastro de fornecedor</span>
+          <span class="text-[11px] font-mono-tech text-slate-400">O novo registro será armazenado na base de fornecedores.</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="fornecedores.html" class="px-4 py-2 bg-[#1b1e26] hover:bg-[#252934] text-slate-300 border border-[#2a2e39] font-mono-tech text-xs rounded transition-colors">
+            Cancelar
+          </a>
+          <button type="submit" form="formFornecedor" id="btnSalvar" class="px-5 py-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-mono-tech font-bold text-xs rounded shadow flex items-center gap-1.5 transition-colors">
+            + Cadastrar fornecedor
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/crud-forms.js"></script>
+  <script src="js/form-fornecedor.js"></script>
+</body>
+</html>
