@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AçoSmart - Painel De Controle</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- CSS Industrial Compartilhado -->
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body class="h-screen w-screen overflow-hidden flex flex-col bg-[#0d0f12] text-slate-300">
+
+  <!-- Header / Barra Superior com Identidade AçoSmart e Navegação Completa -->
+  <header id="header"
+    class="bg-[#14171d] border-b border-[#242832] px-4 py-2.5 flex items-center justify-between shadow-md z-20 shrink-0">
+    <div class="flex items-center space-x-3">
+      <!-- Logo Oficial AçoSmart -->
+     <div
+        class="px-2.5 py-1 bg-[#222733] border border-[#373d4d] rounded text-slate-200 font-mono-tech font-bold text-sm tracking-wider flex items-center gap-1.5">
+        <a href="index.html"> <span>⚙️ AÇOSMART</span></a>
+      </div>
+      <div class="h-4 w-[1px] bg-[#2a2e39]"></div>
+
+      <!-- Navegação Completa do Sistema -->
+      <nav class="flex items-center gap-1 font-mono-tech text-xs">
+        <a href="pedidos.html"
+          class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Pedidos</a>
+        <a href="alertas.html"
+          class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Alertas</a>
+        <a href="materiais.html"
+          class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Materiais</a>
+        <a href="maquinas.html"
+          class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Máquinas</a>
+        <a href="usuarios.html"
+          class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Usuários</a>
+        <a href="fornecedores.html"
+          class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Fornecedores</a>
+        <a href="clientes.html"
+          class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Clientes</a>
+        <a href="oficina.html"
+          class="px-3 py-1.5 rounded text-slate-400 hover:text-slate-200 hover:bg-[#1b1e26]">Oficina</a>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-3 font-mono-tech text-xs">
+      <!-- Status da Conexão com o Banco de Dados MySQL -->
+      <div id="dbBadge"
+        class="px-2 py-0.5 rounded text-[11px] font-mono-tech bg-[#1a2233] text-blue-400 border border-[#2a364f] flex items-center gap-1.5">
+        <span id="dbDot" class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+        <span id="dbText">MySQL: Conectando...</span>
+      </div>
+      <span id="userDisplay" class="text-slate-400">Operador: Admin</span>
+      <a href="login.html" id="btnLogout"
+        class="px-2.5 py-1 bg-[#1b1e26] hover:bg-[#252934] border border-[#2a2e39] rounded text-slate-300">Sair</a>
+    </div>
+  </header> 
+
+  <!-- Conteúdo Principal com Grade Industrial -->
+  <main class="flex-1 p-6 overflow-y-auto industrial-grid">
+    <div class="max-w-6xl mx-auto space-y-6">
+
+      <!-- Breadcrumbs de Rastreio -->
+      
+      <!-- Título da Página e Ações de Controle -->
+      <div id="titulo" class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#222631] pb-4">
+        <div>
+          <h2 class="text-xl font-bold font-mono-tech text-slate-100 flex items-center gap-2">
+            <span>📊</span> Painel De Controle
+          </h2>
+          <p class="text-xs text-slate-400 font-mono-tech mt-1">
+            Acompanhe a situação dos pedidos e os alertas que precisam de atenção.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 font-mono-tech text-xs">
+          <!-- Filtro de Período -->
+          <div class="relative">
+            <button id="btnPeriodSelector"
+              class="px-3 py-2 bg-[#1b1e26] hover:bg-[#252934] text-slate-300 rounded border border-[#2a2e39] flex items-center gap-1.5 shadow">
+              <span>Período: este mês</span>
+              <span class="text-[10px]">▼</span>
+            </button>
+            <div id="periodDropdownMenu"
+              class="hidden absolute right-0 mt-1 w-48 bg-[#14171d] border border-[#222631] rounded shadow-xl py-1 z-30">
+              <a href="#" class="period-option block px-3 py-2 text-slate-300 hover:bg-[#1b1e26] hover:text-blue-400"
+                data-period="este_mes">Período: este mês</a>
+              <a href="#" class="period-option block px-3 py-2 text-slate-300 hover:bg-[#1b1e26] hover:text-blue-400"
+                data-period="todos">Período: todos os dados</a>
+              <a href="#" class="period-option block px-3 py-2 text-slate-300 hover:bg-[#1b1e26] hover:text-blue-400"
+                data-period="mes_anterior">Período: mês anterior</a>
+            </div>
+          </div>
+
+          <!-- Botão Exportar Resumo -->
+          <button id="btnExportarResumo"
+            class="px-3 py-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-mono-tech font-bold text-xs rounded shadow flex items-center gap-1.5">
+            <span>📥 Exportar resumo</span>
+          </button>
+
+          <!-- Botão Recarregar -->
+          <button id="btnReload" title="Recarregar dados do banco de dados MySQL"
+            class="p-2 bg-[#1b1e26] hover:bg-[#252934] text-slate-400 hover:text-blue-400 rounded border border-[#2a2e39]">
+            🔄
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra Informativa Conectada ao Banco de Dados -->
+      <div
+        class="bg-[#14171d] border border-[#222631] rounded p-3 text-xs font-mono-tech text-slate-400 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-blue-400">⚡</span>
+          <span id="bannerText">Conectado ao Banco de Dados AÇOSMART • Métricas calculadas em tempo real.</span>
+        </div>
+        <span class="text-slate-500 text-[11px] hidden sm:inline">MySQL Database: acosmart</span>
+      </div>
+
+      <!-- 4 Cards de Indicadores (KPIs) com Estilo Industrial -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <!-- KPI 1: Pedidos no período -->
+        <div
+          class="bg-[#14171d] border border-[#222631] hover:border-[#373d4d] rounded p-4 shadow-lg transition-all flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs font-mono-tech text-slate-400">
+            <span>Pedidos no período</span>
+            <span class="text-blue-400">📦</span>
+          </div>
+          <div class="my-3">
+            <span id="kpiPedidosTotal" class="text-3xl font-bold font-mono-tech text-slate-100">--</span>
+          </div>
+          <div class="text-[11px] font-mono-tech text-slate-400">
+            <span id="kpiPedidosConcluidos" class="text-emerald-400 font-semibold">-- concluídos</span> • <span
+              id="kpiPedidosAbertoSub" class="text-amber-400">-- em aberto</span>
+          </div>
+        </div>
+
+        <!-- KPI 2: Pedidos em aberto -->
+        <div
+          class="bg-[#14171d] border border-[#222631] hover:border-[#373d4d] rounded p-4 shadow-lg transition-all flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs font-mono-tech text-slate-400">
+            <span>Pedidos em aberto</span>
+            <span class="text-amber-400">⏳</span>
+          </div>
+          <div class="my-3">
+            <span id="kpiPedidosAberto" class="text-3xl font-bold font-mono-tech text-amber-400">--</span>
+          </div>
+          <div class="text-[11px] font-mono-tech text-slate-400">
+            <span id="kpiPedidosProducao" class="text-blue-400 font-semibold">-- em produção</span> • <span
+              id="kpiPedidosFila" class="text-slate-400">-- aguardando</span>
+          </div>
+        </div>
+
+        <!-- KPI 3: Alertas em aberto -->
+        <div
+          class="bg-[#14171d] border border-[#222631] hover:border-[#373d4d] rounded p-4 shadow-lg transition-all flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs font-mono-tech text-slate-400">
+            <span>Alertas em aberto</span>
+            <span class="text-amber-400">⚠️</span>
+          </div>
+          <div class="my-3">
+            <span id="kpiAlertasAberto" class="text-3xl font-bold font-mono-tech text-amber-400">--</span>
+          </div>
+          <div class="text-[11px] font-mono-tech text-slate-400">
+            <span id="kpiAlertasPendentes" class="text-amber-400 font-semibold">-- pendentes</span> • <span
+              id="kpiAlertasAnalise" class="text-blue-400">-- em análise</span>
+          </div>
+        </div>
+
+        <!-- KPI 4: Alertas críticos -->
+        <div
+          class="bg-[#14171d] border border-[#222631] hover:border-[#373d4d] rounded p-4 shadow-lg transition-all flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs font-mono-tech text-slate-400">
+            <span>Alertas críticos</span>
+            <span class="text-red-400">🚨</span>
+          </div>
+          <div class="my-3">
+            <span id="kpiAlertasCriticos" class="text-3xl font-bold font-mono-tech text-red-400">--</span>
+          </div>
+          <div id="subAlertasCriticos" class="text-[11px] font-mono-tech text-slate-400">
+            Prioridade entre os alertas em aberto
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Grade de 2 Gráficos Donut Interativos -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+        <!-- Gráfico 1: Distribuição dos pedidos -->
+        <div
+          class="bg-[#14171d] border border-[#222631] hover:border-[#373d4d] rounded p-5 shadow-lg flex flex-col justify-between transition-all">
+          <div>
+            <h3 class="text-sm font-bold font-mono-tech text-slate-100 flex items-center justify-between">
+              <span>Distribuição dos pedidos</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-[#1b1e26] text-blue-400 border border-[#2a2e39]">Tabela:
+                pedido</span>
+            </h3>
+            <p id="subChartPedidos" class="text-xs font-mono-tech text-slate-400 mt-1">Carregando dados do banco...</p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-6 my-6">
+            <!-- Gráfico Donut em SVG Vetorial -->
+            <div class="relative w-40 h-40 shrink-0">
+              <svg id="svgChartPedidos" viewBox="0 0 200 200" class="w-full h-full drop-shadow-lg"></svg>
+            </div>
+            <!-- Legenda com Indicadores e Percentuais -->
+            <div id="legendPedidos" class="flex flex-col gap-2 font-mono-tech text-xs min-w-[200px]"></div>
+          </div>
+
+          <div class="pt-3 border-t border-[#222631]">
+            <p id="footerChartPedidos" class="text-xs font-mono-tech text-slate-400">
+              --% dos pedidos do período foram concluídos.
+            </p>
+          </div>
+        </div>
+
+        <!-- Gráfico 2: Situação dos alertas -->
+        <div
+          class="bg-[#14171d] border border-[#222631] hover:border-[#373d4d] rounded p-5 shadow-lg flex flex-col justify-between transition-all">
+          <div>
+            <h3 class="text-sm font-bold font-mono-tech text-slate-100 flex items-center justify-between">
+              <span>Situação dos alertas</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-[#1b1e26] text-amber-400 border border-[#2a2e39]">Tabela:
+                Alertas</span>
+            </h3>
+            <p id="subChartAlertas" class="text-xs font-mono-tech text-slate-400 mt-1">Carregando dados do banco...</p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-6 my-6">
+            <!-- Gráfico Donut em SVG Vetorial -->
+            <div class="relative w-40 h-40 shrink-0">
+              <svg id="svgChartAlertas" viewBox="0 0 200 200" class="w-full h-full drop-shadow-lg"></svg>
+            </div>
+            <!-- Legenda com Indicadores e Percentuais -->
+            <div id="legendAlertas" class="flex flex-col gap-2 font-mono-tech text-xs min-w-[200px]"></div>
+          </div>
+
+          <div class="pt-3 border-t border-[#222631]">
+            <p id="footerChartAlertas" class="text-xs font-mono-tech text-slate-400">
+              -- alertas em aberto, sendo -- de prioridade crítica.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tabela Inferior: Resumo de pedidos e alertas -->
+      <div class="bg-[#14171d] border border-[#222631] rounded overflow-hidden shadow-lg">
+        <div class="p-4 border-b border-[#222631] flex items-center justify-between">
+          <div>
+            <h3 class="text-sm font-bold font-mono-tech text-slate-100 flex items-center gap-2">
+              <span>📋</span> Resumo de pedidos e alertas
+            </h3>
+            <p class="text-xs font-mono-tech text-slate-500 mt-0.5">Ações prioritárias sugeridas a partir da produção e
+              manutenção</p>
+          </div>
+          <span
+            class="text-[11px] font-mono-tech text-blue-400 bg-[#1b1e26] border border-[#2a2e39] px-2.5 py-1 rounded">
+            PCP & Usinagem
+          </span>
+        </div>
+
+        <table class="w-full text-left font-mono-tech text-xs">
+          <thead class="bg-[#1a1e28] text-slate-400 border-b border-[#222631] uppercase text-[11px]">
+            <tr>
+              <th class="p-3.5">Grupo</th>
+              <th class="p-3.5">Situação atual</th>
+              <th class="p-3.5">Próxima ação</th>
+              <th class="p-3.5 text-right">Ação</th>
+            </tr>
+          </thead>
+          <tbody id="resumoTableBody" class="divide-y divide-[#222631] text-slate-300">
+            <!-- Linhas alimentadas com os dados do banco -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Tooltip Flutuante dos Gráficos -->
+  <div id="chart-tooltip"></div>
+
+  <!-- Modal de Exportação -->
+  <div id="exportModal" class="hidden fixed inset-0 bg-black/70 z-50 items-center justify-center p-4">
+    <div
+      class="bg-[#14171d] border border-[#2a2e39] rounded-lg shadow-2xl max-w-md w-full p-5 space-y-4 font-mono-tech text-xs">
+      <div class="flex items-center justify-between border-b border-[#222631] pb-3">
+        <h3 class="text-sm font-bold text-slate-100 flex items-center gap-1.5">
+          <span>📤</span> Exportar Relatório de Produção
+        </h3>
+        <button id="btnCloseExportModal" class="text-slate-400 hover:text-slate-100 text-sm">✕</button>
+      </div>
+      <p class="text-slate-400">
+        Selecione o formato para exportar a consolidação atual de pedidos e alertas extraída do banco de dados:
+      </p>
+      <div class="grid grid-cols-2 gap-3 pt-2">
+        <button id="btnModalCsv"
+          class="py-2.5 px-3 bg-[#1b1e26] hover:bg-[#252934] text-slate-200 border border-[#2a2e39] rounded font-bold flex items-center justify-center gap-1.5">
+          📊 Baixar CSV
+        </button>
+        <button id="btnModalPrint"
+          class="py-2.5 px-3 bg-[#2563eb] hover:bg-[#1d4ed8] text-white rounded font-bold flex items-center justify-center gap-1.5 shadow">
+          🖨️ Imprimir / PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script de Integração e Gráficos -->
+  <script src="js/dashboard.js"></script>
+</body>
+
+</html>

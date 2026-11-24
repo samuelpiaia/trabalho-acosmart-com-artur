@@ -5,7 +5,7 @@ if (loginForm) {
     const user = document.getElementById('username').value;
     if (user) {
       localStorage.setItem('acosmart_user', user);
-      window.location.href = 'materiais.html';
+      window.location.href = 'index.html';
     }
   });
 }
@@ -30,7 +30,7 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
       return res.json();
     })
     .then((data) => {
-      window.location.href = "alertas.html";
+      window.location.href = "index.html";
     })
     .catch((err) => {
       alert("Erro ao fazer login: " + err.message);
